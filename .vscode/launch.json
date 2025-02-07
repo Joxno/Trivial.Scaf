@@ -1,0 +1,56 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Debug Website (Hot-Reload)",
+        "type": "coreclr",
+        "request": "launch",
+        "preLaunchTask": "build",
+        "program": "dotnet",
+        "args": [
+          "watch",
+          "--project",
+          "${workspaceFolder}\\Trivial.Frontend"
+        ],
+        "stopAtEntry": false,
+        "env": {
+          "ASPNETCORE_ENVIRONMENT": "Development"
+        }
+      },
+      {
+        "name": "Debug API Server",
+        "type": "coreclr",
+        "request": "launch",
+        "preLaunchTask": "build_api_server",
+        "program": "${workspaceFolder}/Trivial.API/bin/Debug/net9.0/Trivial.API.exe",
+        "args": [
+          
+        ],
+        "cwd": "${workspaceFolder}/Trivial.API",
+        "stopAtEntry": false,
+        "serverReadyAction": {
+          "action": "openExternally",
+          "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+        },
+        "env": {
+          "ASPNETCORE_ENVIRONMENT": "Development"
+        },
+      },
+      {
+        "name": "Attach to .NET Functions",
+        "type": "coreclr",
+        "request": "attach",
+        "processId": "${command:azureFunctions.pickProcess}"
+      }
+    ],
+    "compounds": [
+      {
+        "name": "Website + Functions",
+        "configurations": [ "Debug Website (Hot-Reload)", "Attach to .NET Functions" ],
+        "stopAll": true
+      }
+    ]
+}

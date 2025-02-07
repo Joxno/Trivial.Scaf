@@ -27,8 +27,10 @@ public static class ListCmd
             Console.WriteLine("No Config.");
         });
 
-        t_ListCmd.Add(t_ListPwd);
         t_ListCmd.Add(t_ListTemplates);
+        t_ListCmd.Add(t_ListPwd);
+        t_ListCmd.Add(t_ListRepos);
+        t_ListCmd.Add(t_ListCfg);
         Cmd.Add(t_ListCmd);
     }
 }

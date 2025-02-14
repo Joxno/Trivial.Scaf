@@ -8,6 +8,7 @@ public static class Program
     {
         var t_RootCommand = new RootCommand();
         t_RootCommand.AddCommands();
+        t_RootCommand.AddTemplateCommands();
 
         return await t_RootCommand.InvokeAsync(Args);
     }

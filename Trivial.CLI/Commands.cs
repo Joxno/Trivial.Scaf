@@ -10,5 +10,7 @@ public static class Commands
         Root.AddListCmd();
         Root.AddFolderCmd();
         Root.AddInstallCmd();
+        Root.AddInitCmd();
+        Root.AddRemoveCmd();
     }
 }

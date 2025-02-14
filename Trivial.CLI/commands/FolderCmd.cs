@@ -7,7 +7,7 @@ public static class FolderCmd
 {
     public static void AddFolderCmd(this RootCommand Cmd)
     {
-        var t_FolderCmd = new Command("folder", "Scaffolds a single or multiple folders");
+        var t_FolderCmd = new Command("folder", "Scaffolds single or multiple folders");
         var t_PathOption = new Argument<string[]>("paths", "The path to scaffold");
         t_FolderCmd.Add(t_PathOption);
         t_FolderCmd.SetHandler(async (Paths) => {

@@ -12,9 +12,31 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
+    <PackageId>Trivial.Scaf</PackageId>
+    <Description>Internal Tool: FP and Utilities</Description>
+    <Version>1.0.0</Version>
+    <Authors>Sebastian Georghiou</Authors>
+    <Company>Trivial Software</Company>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageProjectUrl>https://github.com/Joxno/Trivial.Scaf</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Joxno/Trivial.Scaf</RepositoryUrl>
+    <Copyright>Copyright (c) 2025 Sebastian Georghiou, Trivial Software</Copyright>
+
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageVersion>$(PackageVersion)</PackageVersion>
+    <PackageOutputPath>./nupkg</PackageOutputPath>
+    <Dependencies>
+      <Group targetFramework="net9.0" />
+    </Dependencies>
+
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>scaf</ToolCommandName>
-    <PackageOutputPath>./nupkg</PackageOutputPath>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="../LICENSE" Pack="true" PackagePath=""/>
+    <None Include="../README.md" Pack="true" PackagePath=""/>
+  </ItemGroup> 
 
 </Project>

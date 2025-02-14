@@ -1,0 +1,1 @@
+dotnet build .\Trivial.CLI -p:PackageVersion="1.0.0-D$([DateTime]::UtcNow.ToString("yyMMddHHmmss"))"

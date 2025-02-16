@@ -4,7 +4,13 @@ public record struct Template(
     string Name,
     string Key,
     string Description,
+    TemplateGlobal Global,
     List<TemplateRun> Triggers
+);
+
+public record struct TemplateGlobal(
+    List<string> Includes,
+    List<TemplateIncludeConfig> Configs
 );
 
 public record struct TemplateRun(

@@ -27,19 +27,23 @@ public static class InitCmd
         var t_NameArg = new Argument<string>("name", "The name of the template");
         var t_KeyArg = new Argument<string>("key", "The key for the template");
         var t_DescOpt = new Option<string>(["-d", "--description"], "The description of the template");
+        var t_OutputOpt = new Option<string>(["-o", "--output"], "The output directory for the template");
+        t_OutputOpt.SetDefaultValue(Environment.CurrentDirectory);
         t_DescOpt.SetDefaultValue("");
 
         t_InitTemplateCmd.Add(t_NameArg);
         t_InitTemplateCmd.Add(t_KeyArg);
         t_InitTemplateCmd.Add(t_DescOpt);
-        t_InitTemplateCmd.SetHandler(async (Name, Key, Description) => {
-            var t_NewTemplate = new Template(Name, Key, Description, 
+        t_InitTemplateCmd.Add(t_OutputOpt);
+        t_InitTemplateCmd.SetHandler(async (Name, Key, Description, Output) => {
+            var t_NewTemplate = new Template(Name, Key, Description,
+                new(),
                 [ new("", "", [], [], new("Run-Default.ps1", ["Includes.ps1"], [new("ScafCfg", "template.scaf.json")])) ]);
             var t_Serialized = JsonSerializer.Serialize(t_NewTemplate, new JsonSerializerOptions { WriteIndented = true });
-            await File.WriteAllTextAsync(Path.Combine(Environment.CurrentDirectory, $"template.scaf.json"), t_Serialized);
-            await File.WriteAllTextAsync(Path.Combine(Environment.CurrentDirectory, "Run-Default.ps1"), "Hello-World");
-            await File.WriteAllTextAsync(Path.Combine(Environment.CurrentDirectory, "Includes.ps1"), "function Hello-World() {\n\tWrite-Host \"Hello, World! from $($ScafCfg.Name) template.\"\n}");
-        }, t_NameArg, t_KeyArg, t_DescOpt);
+            await File.WriteAllTextAsync(Path.Combine(Output, $"template.scaf.json"), t_Serialized);
+            await File.WriteAllTextAsync(Path.Combine(Output, "Run-Default.ps1"), "Hello-World");
+            await File.WriteAllTextAsync(Path.Combine(Output, "Includes.ps1"), "function Hello-World() {\n\tWrite-Host \"Hello, World! from $($ScafCfg.Name) template.\"\n}");
+        }, t_NameArg, t_KeyArg, t_DescOpt, t_OutputOpt);
         
         t_InitCmd.Add(t_InitTemplateCmd);
         Cmd.Add(t_InitCmd);

@@ -93,7 +93,7 @@ public class TemplateRepository : ITemplateRepository
             if(!File.Exists(Path)) throw new Exception("File not found.");
             if(!Path.EndsWith(".ps1")) throw new Exception("File must be a PowerShell script.");
             var t_ScriptName = System.IO.Path.GetFileNameWithoutExtension(Path);
-            var t_TemplateModel = new Template(t_ScriptName.ToLower(), t_ScriptName.ToLower(), "PowerShell Script", new());
+            var t_TemplateModel = new Template(t_ScriptName.ToLower(), t_ScriptName.ToLower(), "PowerShell Script", new(), new());
 
             var t_TemplatesDir = ScafPaths.GetTemplatesPath();
             var t_TemplateDir = System.IO.Path.Combine(t_TemplatesDir, t_TemplateModel.Name);

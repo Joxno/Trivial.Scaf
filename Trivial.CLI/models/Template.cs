@@ -28,5 +28,12 @@ public record struct TemplateRunParam(
 );
 
 public record struct TemplateRunAction(
-    string Executable
+    string Executable,
+    List<string> Includes,
+    List<TemplateIncludeConfig> Configs
+);
+
+public record struct TemplateIncludeConfig(
+    string Name,
+    string File
 );

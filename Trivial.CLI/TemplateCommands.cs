@@ -4,14 +4,15 @@ using Trivial.CLI.extensions;
 using Trivial.CLI.interfaces;
 using Trivial.CLI.models;
 using Trivial.CLI.services;
+using Trivial.CLI.data;
 
 namespace Trivial.CLI;
 
 public static class TemplateCommands
 {
-    public static void AddTemplateCommands(this RootCommand Root)
+    public static void AddTemplateCommands(this RootCommand Root) => Try.Invoke(() =>
     {
-        var t_Service = new TemplateService();
+        var t_Service = Locator.GetTemplateService();
         var t_Templates = t_Service.GetTemplates();
         foreach(var t_Template in t_Templates)
         {
@@ -24,7 +25,7 @@ public static class TemplateCommands
 
             Root.Add(t_TemplateCmd);
         }
-    }
+    });
 
     private static void _TryAddRun(TemplateRun Trigger, Command TemplateCmd, Template Template, ITemplateService Service) => Try.Invoke(() => {
         if(string.IsNullOrWhiteSpace(Trigger.Keyword))
@@ -52,7 +53,7 @@ public static class TemplateCommands
         });
 
         Cmd.SetHandler(C => {
-            var t_TemplateDir = Service.GetTemplatePath(Template.Name).ValueOr("");
+            var t_TemplateDir = Service.GetTemplatePath(Template.Key).ValueOr("");
             var t_Args = new List<(string, string)>();
             foreach(var t_Arg in Cmd.Arguments)
             {
@@ -65,11 +66,22 @@ public static class TemplateCommands
                 t_Params.Add((t_Opt.Name, C.ParseResult.GetValueForOption(t_Opt)?.ToString() ?? ""));
             }
 
+            var t_CfgIncludes = string.Join("", Trigger.Action.Configs
+                .Select(Cfg => $"${Cfg.Name} = (Get-Content {ScafPaths.ResolvePath(Cfg.File, t_TemplateDir)} | ConvertFrom-Json -Depth 99);").ToList());
+            var t_Includes = string.Join("", Trigger.Action.Includes
+                .Select(Path => $". \"{ScafPaths.ResolvePath(Path, t_TemplateDir)}\";").ToList());
+
             var t_Executable = System.IO.Path.Combine(t_TemplateDir, Trigger.Action.Executable);
             var t_ArgsStr = string.Join(" ", t_Args.Select(A => $"-{A.Item1} {A.Item2}"));
             var t_ParamStr = string.Join(" ", t_Params.Select(P => $"-{P.Item1} {P.Item2}"));
-            var t_ExecutionStr = $"{{$Inject = \"injected data\"; . \"{t_Executable}\" {t_ArgsStr} {t_ParamStr}}}";
-            Console.WriteLine(t_ExecutionStr);
+            var t_ExecutionStr = string.Join("", [
+                "{",
+                t_CfgIncludes,
+                t_Includes,
+                $". \"{t_Executable}\" {t_ArgsStr} {t_ParamStr};",
+                "}"
+            ]);
+            //Console.WriteLine(t_ExecutionStr);
             t_ExecutionStr.RunAsTerminalCmd();
             
         });

@@ -6,12 +6,14 @@ public static class StringExtensions
 {
     public static void RunAsTerminalCmd(this string Cmd)
     {
+        var t_CmdArg = $"-Command \"& {Cmd.EscapeQuotes()}\"";
+        //Console.WriteLine(t_CmdArg);
         using var t_Process = new Process
         {
             StartInfo = new ProcessStartInfo
             {
                 FileName = "pwsh",
-                Arguments = $"-Command \"& {Cmd.EscapeQuotes()}\"",
+                Arguments = t_CmdArg,
                 RedirectStandardOutput = true,
                 UseShellExecute = false,
                 CreateNoWindow = true

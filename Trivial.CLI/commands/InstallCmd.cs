@@ -18,7 +18,7 @@ public static class InstallCmd
         t_TemplateCmd.Add(t_TemplateForce);
         t_TemplateCmd.SetHandler(async (Path, Force) => {
             var t_ResolvedPath = ScafPaths.ResolvePath(Path);
-            var t_Service = new TemplateService();
+            var t_Service = Locator.GetTemplateService();
             var t_Result = t_Service.InstallTemplate(t_ResolvedPath, Force);
             t_Result.Then(_ => {
                 Console.WriteLine("Template Installed.");
@@ -33,7 +33,7 @@ public static class InstallCmd
         t_ScriptCmd.Add(t_ScriptPath);
         t_ScriptCmd.SetHandler(async (Path) => {
             var t_ResolvedPath = ScafPaths.ResolvePath(Path);
-            var t_Service = new TemplateService();
+            var t_Service = Locator.GetTemplateService();
             var t_Result = t_Service.InstallScript(t_ResolvedPath);
             t_Result.Then(_ => {
                 Console.WriteLine("Script Installed.");

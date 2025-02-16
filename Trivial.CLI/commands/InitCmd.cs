@@ -33,10 +33,12 @@ public static class InitCmd
         t_InitTemplateCmd.Add(t_KeyArg);
         t_InitTemplateCmd.Add(t_DescOpt);
         t_InitTemplateCmd.SetHandler(async (Name, Key, Description) => {
-            var t_NewTemplate = new Template(Name, Key, Description, [ new("", "", [], [], new("Run-Default.ps1")) ]);
+            var t_NewTemplate = new Template(Name, Key, Description, 
+                [ new("", "", [], [], new("Run-Default.ps1", ["Includes.ps1"], [new("ScafCfg", "template.scaf.json")])) ]);
             var t_Serialized = JsonSerializer.Serialize(t_NewTemplate, new JsonSerializerOptions { WriteIndented = true });
             await File.WriteAllTextAsync(Path.Combine(Environment.CurrentDirectory, $"template.scaf.json"), t_Serialized);
-            await File.WriteAllTextAsync(Path.Combine(Environment.CurrentDirectory, "Run-Default.ps1"), "Write-Host 'Hello, World!'");
+            await File.WriteAllTextAsync(Path.Combine(Environment.CurrentDirectory, "Run-Default.ps1"), "Hello-World");
+            await File.WriteAllTextAsync(Path.Combine(Environment.CurrentDirectory, "Includes.ps1"), "function Hello-World() {\n\tWrite-Host \"Hello, World! from $($ScafCfg.Name) template.\"\n}");
         }, t_NameArg, t_KeyArg, t_DescOpt);
         
         t_InitCmd.Add(t_InitTemplateCmd);

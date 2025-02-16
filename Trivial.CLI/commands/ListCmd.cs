@@ -11,7 +11,7 @@ public static class ListCmd
         var t_ListCmd = new Command("list", "Lists objects");
         var t_ListTemplates = new Command("templates", "Lists available templates");
         t_ListTemplates.SetHandler(async () => {
-            var t_Service = new TemplateService();
+            var t_Service = Locator.GetTemplateService();
             var t_Templates = t_Service.GetTemplates();
             Console.WriteLine("Name\t\tKey\t\tDescription");
             foreach(var t_Template in t_Templates)

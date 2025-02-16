@@ -21,6 +21,9 @@ public static class ScafPaths
     public static string ResolvePath(string Path) =>
         System.IO.Path.IsPathFullyQualified(Path) ? Path : System.IO.Path.Combine(Environment.CurrentDirectory, Path);
 
+    public static string ResolvePath(string Path, string WorkingDir) =>
+        System.IO.Path.IsPathFullyQualified(Path) ? Path : System.IO.Path.Combine(WorkingDir, Path);
+
     public static void CopyTemplate(string Path, string Destination)
     {
         _CopyDirectoryRecursively(Path, Destination);

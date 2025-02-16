@@ -37,7 +37,7 @@ public static class InitCmd
         t_InitTemplateCmd.Add(t_OutputOpt);
         t_InitTemplateCmd.SetHandler(async (Name, Key, Description, Output) => {
             var t_NewTemplate = new Template(Name, Key, Description,
-                new(),
+                new(new(), new()),
                 [ new("", "", [], [], new("Run-Default.ps1", ["Includes.ps1"], [new("ScafCfg", "template.scaf.json")])) ]);
             var t_Serialized = JsonSerializer.Serialize(t_NewTemplate, new JsonSerializerOptions { WriteIndented = true });
             await File.WriteAllTextAsync(Path.Combine(Output, $"template.scaf.json"), t_Serialized);

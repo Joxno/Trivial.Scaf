@@ -66,6 +66,12 @@ public static class TemplateCommands
                 t_Params.Add((t_Opt.Name, C.ParseResult.GetValueForOption(t_Opt)?.ToString() ?? ""));
             }
 
+            var t_GlobalCfgIncludes = string.Join("", Template.Global.Configs
+                .Select(Cfg => $"${Cfg.Name} = (Get-Content {ScafPaths.ResolvePath(Cfg.File, t_TemplateDir)} | ConvertFrom-Json -Depth 99);").ToList());
+
+            var t_GlobalIncludes = string.Join("", Template.Global.Includes
+                .Select(Path => $". \"{ScafPaths.ResolvePath(Path, t_TemplateDir)}\";").ToList());
+
             var t_CfgIncludes = string.Join("", Trigger.Action.Configs
                 .Select(Cfg => $"${Cfg.Name} = (Get-Content {ScafPaths.ResolvePath(Cfg.File, t_TemplateDir)} | ConvertFrom-Json -Depth 99);").ToList());
             var t_Includes = string.Join("", Trigger.Action.Includes
@@ -76,6 +82,8 @@ public static class TemplateCommands
             var t_ParamStr = string.Join(" ", t_Params.Select(P => $"-{P.Item1} {P.Item2}"));
             var t_ExecutionStr = string.Join("", [
                 "{",
+                t_GlobalCfgIncludes,
+                t_GlobalIncludes,
                 t_CfgIncludes,
                 t_Includes,
                 $". \"{t_Executable}\" {t_ArgsStr} {t_ParamStr};",

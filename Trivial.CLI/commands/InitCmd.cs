@@ -3,6 +3,7 @@ using System.Text.Json;
 using Trivial.CLI.data;
 using Trivial.CLI.extensions;
 using Trivial.CLI.models;
+using Trivial.CLI.services;
 
 namespace Trivial.CLI.commands;
 
@@ -10,6 +11,7 @@ public static class InitCmd
 {
     public static void AddInitCmd(this RootCommand Cmd)
     {
+        var t_Service = Locator.GetSettingsService();
         var t_InitCmd = Cmd.NewSub("init", "Initialises the scaf tool", () => {
             var t_Paths = ScafPaths.GetInitPaths();
             foreach(var t_Path in t_Paths)
@@ -20,6 +22,8 @@ public static class InitCmd
                     Console.WriteLine($"Created Directory: {t_Path}");
                 }
             }
+
+            t_Service.Init();
         });
 
         var t_InitTemplateCmd = t_InitCmd.NewSub("template", "Initialises a template", 

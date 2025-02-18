@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Text.Json;
 
 namespace Trivial.CLI.extensions;
 
@@ -27,4 +28,7 @@ public static class StringExtensions
 
     public static string EscapeQuotes(this string Str) => 
         Str.Replace("\"", "\\\"");
+
+    public static string ToJson<T>(this T Obj) => 
+        JsonSerializer.Serialize(Obj, new JsonSerializerOptions { WriteIndented = true });
 }

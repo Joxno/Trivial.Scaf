@@ -17,7 +17,7 @@ public class TemplateRepository : ITemplateRepository
         _IndexTemplates();
     }
 
-    private void _IndexTemplates()
+    private Result<Unit> _IndexTemplates() => Try.Invoke(() =>
     {
         var t_Templates = m_InstalledTemplatesPaths.SelectMany(_IndexTemplatesAtPath).ToList();
         foreach(var t_Indexed in t_Templates)
@@ -25,7 +25,7 @@ public class TemplateRepository : ITemplateRepository
             m_Templates.Add(t_Indexed.T);
             m_TemplatePaths.Add(t_Indexed.T.Key, t_Indexed.P);
         }
-    }
+    });
 
     public Result<Unit> DeleteTemplate(Template Template) =>
         DeleteTemplate(Template.Key);

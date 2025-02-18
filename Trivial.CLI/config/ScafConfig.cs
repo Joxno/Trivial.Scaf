@@ -1,5 +1,6 @@
 namespace Trivial.CLI.config;
 
 public record struct ScafConfig(
-    TemplatesConfig TemplatesCfg
+    TemplatesConfig TemplatesCfg,
+    ReposConfig ReposCfg
 );

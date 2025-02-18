@@ -92,10 +92,10 @@ public static class Cmd
     }
 
     public static Command NewSub(this Command Cmd, string Name, string Description) => 
-        new Command(Name, Description);
+        new Command(Name, Description).Tap(C => Cmd.Add(C));
 
     public static Command NewSub(this Command Cmd, string Name, string Description, Action CmdAction) => 
-        new Command(Name, Description).Tap(C => C.SetHandler(CmdAction));
+        new Command(Name, Description).Tap(C => C.SetHandler(CmdAction)).Tap(C => Cmd.Add(C));
 
     public static Command NewSub<T1>(this Command Cmd, string Name, string Description, Action<T1> CmdAction, IValueDescriptor<T1> P1)
     {

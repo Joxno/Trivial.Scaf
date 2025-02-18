@@ -9,6 +9,7 @@ public static class ListCmd
 {
     public static void AddListCmd(this RootCommand Cmd)
     {
+        var t_Service = Locator.GetSettingsService();
         var t_ListCmd = Cmd.NewSub("list", "Lists objects");
 
         var t_ListTemplates = t_ListCmd.NewSub("templates", "Lists available templates", () => {
@@ -29,8 +30,27 @@ public static class ListCmd
             Console.WriteLine("No Repositories.");
         });
 
-        var t_ListCfg = t_ListCmd.NewSub("cfg", "Lists config", () => {
-            Console.WriteLine("No Config.");
+        var t_ListCfg = t_ListCmd.NewSub("cfg", "Lists config");
+        var t_ListAllCfg = t_ListCfg.NewSub("all", "Lists full config file", () => {
+            var t_Config = t_Service.GetToolConfig();
+            t_Config.Then(
+                Cfg => Console.WriteLine(Cfg.ToJson()),
+                E => Console.WriteLine(E.Message)
+            );
+        });
+        var t_ListReposCfg = t_ListCfg.NewSub("repos", "Lists repository config", () => {
+            var t_Config = t_Service.GetReposConfig();
+            t_Config.Then(
+                Cfg => Console.WriteLine(Cfg.ToJson()),
+                E => Console.WriteLine(E.Message)
+            );
+        });
+        var t_ListTemplatesCfg = t_ListCfg.NewSub("templates", "Lists templates config", () => {
+            var t_Config = t_Service.GetTemplatesConfig();
+            t_Config.Then(
+                Cfg => Console.WriteLine(Cfg.ToJson()),
+                E => Console.WriteLine(E.Message)
+            );
         });
 
         var t_ListDirs = t_ListCmd.NewSub("dirs", "Lists directories", () => {

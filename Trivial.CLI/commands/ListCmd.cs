@@ -1,5 +1,6 @@
 using System.CommandLine;
 using Trivial.CLI.data;
+using Trivial.CLI.extensions;
 using Trivial.CLI.services;
 
 namespace Trivial.CLI.commands;
@@ -8,9 +9,9 @@ public static class ListCmd
 {
     public static void AddListCmd(this RootCommand Cmd)
     {
-        var t_ListCmd = new Command("list", "Lists objects");
-        var t_ListTemplates = new Command("templates", "Lists available templates");
-        t_ListTemplates.SetHandler(async () => {
+        var t_ListCmd = Cmd.NewSub("list", "Lists objects");
+
+        var t_ListTemplates = t_ListCmd.NewSub("templates", "Lists available templates", () => {
             var t_Service = Locator.GetTemplateService();
             var t_Templates = t_Service.GetTemplates();
             Console.WriteLine("Name\t\tKey\t\tDescription");
@@ -20,35 +21,20 @@ public static class ListCmd
             }
         });
 
-        var t_ListPwd = new Command("pwd", "Lists the current working directory");
-        t_ListPwd.SetHandler(async () => {
+        var t_ListPwd = t_ListCmd.NewSub("pwd", "Lists the current working directory", () => {
             Console.WriteLine(Environment.CurrentDirectory);
         });
 
-        var t_ListRepos = new Command("repos", "Lists template repositories");
-        t_ListRepos.SetHandler(async () => {
+        var t_ListRepos = t_ListCmd.NewSub("repos", "Lists template repositories", () => {
             Console.WriteLine("No Repositories.");
         });
 
-        var t_ListCfg = new Command("cfg", "Lists config");
-        t_ListCfg.SetHandler(async () => {
+        var t_ListCfg = t_ListCmd.NewSub("cfg", "Lists config", () => {
             Console.WriteLine("No Config.");
         });
 
-        var t_ListDirs = new Command("dirs", "Lists directories");
-        t_ListDirs.SetHandler(async () => {
-            var t_Dirs = ScafPaths.GetInitPaths();
-            foreach(var t_Dir in t_Dirs)
-            {
-                Console.WriteLine(t_Dir);
-            }
+        var t_ListDirs = t_ListCmd.NewSub("dirs", "Lists directories", () => {
+            ScafPaths.GetInitPaths().ToList().ForEach(t_Dir => Console.WriteLine(t_Dir));
         });
-
-        t_ListCmd.Add(t_ListDirs);
-        t_ListCmd.Add(t_ListTemplates);
-        t_ListCmd.Add(t_ListPwd);
-        t_ListCmd.Add(t_ListRepos);
-        t_ListCmd.Add(t_ListCfg);
-        Cmd.Add(t_ListCmd);
     }
 }

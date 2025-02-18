@@ -5,6 +5,7 @@ using Trivial.CLI.interfaces;
 using Trivial.CLI.models;
 using Trivial.CLI.services;
 using Trivial.CLI.data;
+using System.CommandLine.Parsing;
 
 namespace Trivial.CLI;
 
@@ -52,19 +53,11 @@ public static class TemplateCommands
             Cmd.Add(t_Option);
         });
 
-        Cmd.SetHandler(C => {
+        Cmd.SetHandler(C =>
+        {
             var t_TemplateDir = Service.GetTemplatePath(Template.Key).ValueOr("");
-            var t_Args = new List<(string, string)>();
-            foreach(var t_Arg in Cmd.Arguments)
-            {
-                t_Args.Add((t_Arg.Name, C.ParseResult.GetValueForArgument(t_Arg)?.ToString() ?? ""));
-            }
-
-            var t_Params = new List<(string, string)>();
-            foreach(var t_Opt in Cmd.Options)
-            {
-                t_Params.Add((t_Opt.Name, C.ParseResult.GetValueForOption(t_Opt)?.ToString() ?? ""));
-            }
+            var t_Args = _ConstructArgsList(Cmd, C);
+            var t_Params = _ConstructParamsList(Cmd, C);
 
             var t_GlobalCfgIncludes = string.Join("", Template.Global.Configs
                 .Select(Cfg => $"${Cfg.Name} = (Get-Content {ScafPaths.ResolvePath(Cfg.File, t_TemplateDir)} | ConvertFrom-Json -Depth 99);").ToList());
@@ -91,7 +84,17 @@ public static class TemplateCommands
             ]);
             //Console.WriteLine(t_ExecutionStr);
             t_ExecutionStr.RunAsTerminalCmd();
-            
+
         });
     });
+
+    private static List<(string, string)> _ConstructParamsList(Command Cmd, System.CommandLine.Invocation.InvocationContext C) =>
+        Cmd.Options
+            .Where(O => C.ParseResult.FindResultFor(O) is OptionResult)
+            .Select(O => (O.Name, C.ParseResult.GetValueForOption(O)?.ToString() ?? "")).ToList();
+
+    private static List<(string, string)> _ConstructArgsList(Command Cmd, System.CommandLine.Invocation.InvocationContext C) =>
+        Cmd.Arguments
+            .Where(O => C.ParseResult.FindResultFor(O) is ArgumentResult)
+            .Select(A => (A.Name, C.ParseResult.GetValueForArgument(A)?.ToString() ?? "")).ToList();
 }

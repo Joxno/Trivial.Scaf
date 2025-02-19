@@ -12,5 +12,9 @@ public static class Commands
         Root.AddInstallCmd();
         Root.AddInitCmd();
         Root.AddRemoveCmd();
+        Root.AddIndexCmd();
+        Root.AddConfigCmd();
+        Root.AddRepoCmd();
+        Root.AddSearchCmd();
     }
 }

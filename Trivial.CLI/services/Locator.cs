@@ -10,7 +10,11 @@ public static class Locator
     private static ISettingsService m_SettingsService = new SettingsService(m_SettingsRepository);
     private static ITemplateRepository m_TemplateRepository = new TemplateRepository(m_SettingsService.GetTemplatesConfig().Map(C => C.InstalledTemplatesPaths).ValueOr([ScafPaths.GetTemplatesPath()]));
     private static ITemplateService m_TemplateService = new TemplateService(m_TemplateRepository);
+    private static IRepoService m_RepoService = new RepoService(m_SettingsService);
+    private static ISearchService m_RepoSearchService = new SearchService(m_RepoService);
 
     public static ITemplateService GetTemplateService() => m_TemplateService;
     public static ISettingsService GetSettingsService() => m_SettingsService;
+    public static IRepoService GetRepoService() => m_RepoService;
+    public static ISearchService GetSearchService() => m_RepoSearchService;
 }

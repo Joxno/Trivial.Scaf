@@ -10,9 +10,11 @@ public class SettingsRepository : ISettingsRepository
     private const string m_ConfigFileName = "config.scaf.json";
 
     public Result<Unit> Init() => Try.Invoke(() => {
+        if(File.Exists(Path.Combine(ScafPaths.GetConfigPath(), m_ConfigFileName))) return Result.Unit;
+
         var t_DefaultConfig = new ScafConfig(
             new TemplatesConfig([ScafPaths.GetTemplatesPath()]),
-            new ReposConfig([])
+            new RemoteReposConfig([])
         );
 
         return SaveToolConfig(t_DefaultConfig);

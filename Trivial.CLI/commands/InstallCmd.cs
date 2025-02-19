@@ -13,14 +13,15 @@ public static class InstallCmd
         var t_Service = Locator.GetTemplateService();
 
         var t_InstallCmd = Cmd.NewSub("install", "Installs a scaffold");
-        var t_TemplateCmd = t_InstallCmd.NewSub("template", "Installs a template", (Path, Force) => 
+        var t_TemplateCmd = t_InstallCmd.NewSub("template", "Installs a template", (Path, Force, FromPath) => 
             t_Service.InstallTemplate(ScafPaths.ResolvePath(Path), Force)
                 .Then(
                     _ => Console.WriteLine("Template Installed."),
                     E => Console.WriteLine(E.Message)
                 ),
             new Argument<string>("path", "The path to the template"),
-            new Option<bool>(["--force", "-f"], () => false, "Forces the installation")
+            new Option<bool>(["--force", "-f"], () => false, "Forces the installation"),
+            new Option<bool>(["--from-path", "-p"], () => false, "Installs from a path")
         );
 
         var t_ScriptCmd = t_InstallCmd.NewSub("script", "Installs a script", Path => 

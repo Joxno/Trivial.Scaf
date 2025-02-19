@@ -1,6 +1,7 @@
 namespace Trivial.CLI.models;
 
 public record struct Template(
+    Guid Id,
     string Name,
     string Key,
     string Description,

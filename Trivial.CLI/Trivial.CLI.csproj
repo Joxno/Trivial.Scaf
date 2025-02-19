@@ -6,11 +6,12 @@
     <PackageReference Include="Trivial.Functional" Version="*-*" />
   </ItemGroup>
 
-  <PropertyGroup>
+  <PropertyGroup Condition="'$(BuildType)' == 'tool'">
     <OutputType>Exe</OutputType>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <InvariantGlobalization>true</InvariantGlobalization>
 
     <PackageId>Trivial.Scaf</PackageId>
     <Description>Internal Tool: FP and Utilities</Description>
@@ -32,7 +33,29 @@
 
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>scaf</ToolCommandName>
+
+    <!-- <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained> -->
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(BuildType)' == 'standalone-win-x64'">
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <InvariantGlobalization>true</InvariantGlobalization>
+
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    
+    <PublishTrimmed>true</PublishTrimmed>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+  </PropertyGroup>
+
 
   <ItemGroup>
     <None Include="../LICENSE" Pack="true" PackagePath=""/>

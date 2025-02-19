@@ -183,7 +183,7 @@ public static class Cmd
 
     private static void _AddParam<T>(this Command Cmd, IValueDescriptor<T> Param) =>
         Param.GetType().SwitchOnValue(
-            (typeof(Option), () => Cmd.Add((Option)Param)),
-            (typeof(Argument), () => Cmd.Add((Argument)Param))
+            (typeof(Option<T>), () => Cmd.Add((Option<T>)Param)),
+            (typeof(Argument<T>), () => Cmd.Add((Argument<T>)Param))
         );
 }

@@ -11,11 +11,15 @@ public static class ScafPaths
     public static string GetConfigPath() =>
         Path.Combine(GetRootPath(), "cfg");
 
+    public static string GetRemotesPath() =>
+        Path.Combine(GetConfigPath(), "remotes");
+
     public static string[] GetInitPaths() =>
         [ 
             GetRootPath(), 
             GetTemplatesPath(), 
-            GetConfigPath()
+            GetConfigPath(),
+            GetRemotesPath()
         ];
 
     public static string ResolvePath(string Path) =>

@@ -17,7 +17,7 @@ public static class TemplateCommands
         var t_Templates = t_Service.GetTemplates();
         foreach(var t_Template in t_Templates)
         {
-            var t_TemplateCmd = new Command(t_Template.Key, $"Runs the {t_Template.Name} template");
+            var t_TemplateCmd = new Command(t_Template.Key, $"Runs the {t_Template.Name} scaffold");
 
             foreach(var t_Trigger in t_Template.Triggers)
             {

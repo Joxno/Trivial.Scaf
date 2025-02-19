@@ -14,9 +14,37 @@ Prerequisites:
 * Powershell v7.5
 
 # Installation
+### Dotnet
+Easily install the tool via dotnet.
 ```pwsh
-dotnet install tool Trivial.Scaf --prerelease
+dotnet install tool Trivial.Scaf --global --prerelease
 ```
 
+### Standalone
+Portable standalone executables
+
+### Docker
+Build docker image with predefined defaults.
+```pwsh
+.\Build-Docker.ps1
+```
+Run the built docker image interactively in a temporary container.
+```pwsh
+.\Run-Docker.ps1
+```
+
+# Commands
+#### scaf config <add | remove>
+#### scaf folder \<path>
+#### scaf init <repo | template>
+#### scaf index \<repo>
+#### scaf install <template | script>
+#### scaf list <templates | repos | cfg | pwd | dirs>
+#### scaf remove \<key>
+#### scaf repo <add | remove>
+#### scaf search \<query>
+#### scaf workspace
+#### scaf \<key>
+
 ## License
-MIT
+[MIT](LICENSE)

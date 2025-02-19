@@ -8,12 +8,12 @@ namespace Trivial.CLI.services;
 
 public class RepoService(ISettingsService Service) : IRepoService
 {
-    public Result<RepoIndexConfig> InitRepo(string Path, Maybe<string> Name) => Try.Invoke(() => {
+    public Result<IndexConfig> InitRepo(string Path, Maybe<string> Name) => Try.Invoke(() => {
         var t_ResolvedPath = ScafPaths.ResolvePath(Path);
         if(!Directory.Exists(t_ResolvedPath))
             Directory.CreateDirectory(t_ResolvedPath);
 
-        var t_Repo = new RepoIndexConfig(
+        var t_Repo = new IndexConfig(
             Guid.NewGuid(),
             "new-repo",
             t_ResolvedPath,
@@ -28,13 +28,13 @@ public class RepoService(ISettingsService Service) : IRepoService
         return t_Repo;
     });
 
-    public Result<RepoIndexConfig> IndexRepo(string Path) => Try.Invoke(() => {
+    public Result<IndexConfig> IndexRepo(string Path) => Try.Invoke(() => {
         var t_ResolvedPath = ScafPaths.ResolvePath(Path);
         var t_RepoIndexPath = System.IO.Path.Combine(t_ResolvedPath, "repo.scaf.json");
         if(!File.Exists(t_RepoIndexPath))
             return new Exception($"Repo index not found at {t_RepoIndexPath}");
 
-        var t_Repo = JsonSerializer.Deserialize<RepoIndexConfig>(File.ReadAllText(t_RepoIndexPath));
+        var t_Repo = JsonSerializer.Deserialize<IndexConfig>(File.ReadAllText(t_RepoIndexPath));
         var t_IndexedTemplates = _IndexTemplates(t_ResolvedPath).ToList();
         t_Repo = t_Repo with { 
             Templates = t_IndexedTemplates.Select(I => I with { Path = I.Path.Replace(t_ResolvedPath, "") }).ToList()
@@ -45,9 +45,9 @@ public class RepoService(ISettingsService Service) : IRepoService
         return t_Repo.ToResult();
     }).Flatten();
 
-    private List<RepoTemplateIndex> _IndexTemplates(string Path)
+    private List<TemplateIndex> _IndexTemplates(string Path)
     {
-        var t_Index = new List<RepoTemplateIndex>();
+        var t_Index = new List<TemplateIndex>();
         var t_Dirs = Directory.GetDirectories(Path);
         if(t_Dirs is null || t_Dirs.Length == 0) return [];
 
@@ -87,7 +87,7 @@ public class RepoService(ISettingsService Service) : IRepoService
         var t_IndexPath = System.IO.Path.Combine(t_ResolvedPath, "repo.scaf.json");
         if(!File.Exists(t_IndexPath)) throw new Exception($"Repo index not found at {t_IndexPath}");
 
-        var t_Repo = JsonSerializer.Deserialize<RepoIndexConfig>(File.ReadAllText(t_IndexPath));
+        var t_Repo = JsonSerializer.Deserialize<IndexConfig>(File.ReadAllText(t_IndexPath));
         var t_LocalIndexDirPath = System.IO.Path.Combine(ScafPaths.GetRemotesPath(), t_Repo.Id.ToString());
         var t_LocalIndexPath = System.IO.Path.Combine(t_LocalIndexDirPath, $"repo.scaf.json");
 
@@ -95,26 +95,13 @@ public class RepoService(ISettingsService Service) : IRepoService
             Directory.CreateDirectory(t_LocalIndexDirPath);
 
         Name.Then(N => t_Repo = t_Repo with { Name = N });
-        _AddRepoToConfig(t_Repo.Url, t_Repo.Name);
+        Service.SaveRemoteConfig(new(t_Repo.Url, t_Repo.Name));
 
         File.WriteAllText(t_LocalIndexPath, JsonSerializer.Serialize(t_Repo, new JsonSerializerOptions { WriteIndented = true }));
     }
 
-    private void _AddRepoToConfig(string Url, string Name)
-    {
-        Service.GetToolConfig().Then(Cfg => {
-            var t_Settings = Cfg with {
-                ReposCfg = Cfg.ReposCfg with {
-                    Repos = Cfg.ReposCfg.Repos.Append(new(Url, Name)).ToList()
-                }
-            };
-
-            Service.SaveToolConfig(t_Settings);
-        });
-    }
-
     public Result<Unit> RemoveRemoteRepo(string Name) => Try.Invoke(() =>
-        GetIndexes().FirstOrNone(I => I.Name == Name).ToResult()
+        GetLocalIndexes().FirstOrNone(I => I.Name == Name).ToResult()
             .Then(I => {
                 var t_Path = System.IO.Path.Combine(ScafPaths.GetRemotesPath(), I.Id.ToString());
                 Directory.Delete(t_Path, true);
@@ -122,7 +109,7 @@ public class RepoService(ISettingsService Service) : IRepoService
             }));
         
 
-    public List<RepoIndexConfig> GetIndexes() => Try.Invoke(() => {
+    public List<IndexConfig> GetLocalIndexes() => Try.Invoke(() => {
         var t_RemotesPath = ScafPaths.GetRemotesPath();
         var t_Remotes = Directory.GetDirectories(t_RemotesPath);
         if(t_Remotes is null || t_Remotes.Length == 0) return [];
@@ -130,7 +117,7 @@ public class RepoService(ISettingsService Service) : IRepoService
         return t_Remotes.Where(R => File.Exists(System.IO.Path.Combine(R, "repo.scaf.json"))).Select(R => {
             var t_RepoIndexPath = System.IO.Path.Combine(R, "repo.scaf.json");
 
-            return JsonSerializer.Deserialize<RepoIndexConfig>(File.ReadAllText(t_RepoIndexPath));
+            return JsonSerializer.Deserialize<IndexConfig>(File.ReadAllText(t_RepoIndexPath));
         }).ToList();
     }).ValueOr([]);
 }

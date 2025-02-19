@@ -1,13 +1,13 @@
 namespace Trivial.CLI.config;
 
-public record struct RepoIndexConfig(
+public record struct IndexConfig(
     Guid Id,
     string Name,
     string Url,
-    List<RepoTemplateIndex> Templates
+    List<TemplateIndex> Templates
 );
 
-public record struct RepoTemplateIndex(
+public record struct TemplateIndex(
     string Id,
     string Name,
     string Key,

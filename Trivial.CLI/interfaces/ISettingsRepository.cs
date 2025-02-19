@@ -5,6 +5,6 @@ namespace Trivial.CLI.interfaces;
 public interface ISettingsRepository
 {
     Result<Unit> Init();
-    Result<ScafConfig> GetToolConfig();
-    Result<Unit> SaveToolConfig(ScafConfig Config);
+    Result<ToolConfig> GetToolConfig();
+    Result<Unit> SaveToolConfig(ToolConfig Config);
 }

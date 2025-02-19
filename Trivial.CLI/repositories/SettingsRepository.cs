@@ -12,21 +12,21 @@ public class SettingsRepository : ISettingsRepository
     public Result<Unit> Init() => Try.Invoke(() => {
         if(File.Exists(Path.Combine(ScafPaths.GetConfigPath(), m_ConfigFileName))) return Result.Unit;
 
-        var t_DefaultConfig = new ScafConfig(
+        var t_DefaultConfig = new ToolConfig(
             new TemplatesConfig([ScafPaths.GetTemplatesPath()]),
-            new RemoteReposConfig([])
+            new RemotesConfig([])
         );
 
         return SaveToolConfig(t_DefaultConfig);
     }).Flatten();
 
-    public Result<ScafConfig> GetToolConfig() => Try.Invoke(() => {
+    public Result<ToolConfig> GetToolConfig() => Try.Invoke(() => {
         var t_ConfigPath = Path.Combine(ScafPaths.GetConfigPath(), m_ConfigFileName);
         var t_Json = File.ReadAllText(t_ConfigPath);
-        return JsonSerializer.Deserialize<ScafConfig>(t_Json);
+        return JsonSerializer.Deserialize<ToolConfig>(t_Json);
     });
 
-    public Result<Unit> SaveToolConfig(ScafConfig Config) => Try.Invoke(() => {
+    public Result<Unit> SaveToolConfig(ToolConfig Config) => Try.Invoke(() => {
         var t_ConfigPath = Path.Combine(ScafPaths.GetConfigPath(), m_ConfigFileName);
         var t_Json = JsonSerializer.Serialize(Config);
         File.WriteAllText(t_ConfigPath, t_Json);

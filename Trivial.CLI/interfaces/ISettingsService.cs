@@ -5,10 +5,11 @@ namespace Trivial.CLI.interfaces;
 public interface ISettingsService
 {
     Result<Unit> Init();
-    Result<RemoteReposConfig> GetReposConfig();
+    Result<RemotesConfig> GetReposConfig();
     Result<TemplatesConfig> GetTemplatesConfig();
-    Result<ScafConfig> GetToolConfig();
-    Result<Unit> SaveToolConfig(ScafConfig Config);
+    Result<ToolConfig> GetToolConfig();
+    Result<Unit> SaveToolConfig(ToolConfig Config);
     Result<Unit> SaveTemplatesConfig(TemplatesConfig Config);
-    Result<Unit> SaveReposConfig(RemoteReposConfig Config);
+    Result<Unit> SaveReposConfig(RemotesConfig Config);
+    Result<Unit> SaveRemoteConfig(RemoteConfig Config);
 }

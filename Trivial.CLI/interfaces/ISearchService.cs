@@ -4,7 +4,7 @@ namespace Trivial.CLI.interfaces;
 
 public interface ISearchService
 {
-    List<RepoTemplateIndex> SearchForTemplateById(Guid Id);
-    List<RepoTemplateIndex> SearchForTemplateByKey(string Key);
-    List<RepoTemplateIndex> SearchForTemplateByName(string Name);
+    List<TemplateIndex> SearchForTemplateById(Guid Id);
+    List<TemplateIndex> SearchForTemplateByKey(string Key);
+    List<TemplateIndex> SearchForTemplateByName(string Name);
 }

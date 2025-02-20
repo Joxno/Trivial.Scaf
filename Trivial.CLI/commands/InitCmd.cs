@@ -25,7 +25,10 @@ public static class InitCmd
                 }
             }
 
-            t_Service.Init();
+            t_Service.Init().Then(
+                _ => Console.WriteLine("Initialised scaf tool."),
+                E => Console.WriteLine(E.Message)
+            );
         });
 
         var t_InitTemplateCmd = t_InitCmd.NewSub("template", "Initialises a template", 

@@ -10,7 +10,7 @@ Automating code generation and scaffolding
 
 # Dependencies
 Prerequisites:
-* [.NET 9.0](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)
+* [.NET 9.0](https://dotnet.microsoft.com/en-us/download/dotnet/9.0) (If installing via dotnet)
 * [Powershell v7.5](https://github.com/PowerShell/PowerShell/releases/tag/v7.5.0)
 
 # Installation
@@ -21,8 +21,9 @@ dotnet install tool Trivial.Scaf --global --prerelease
 ```
 
 ### Standalone
-Portable standalone executables:
-* standalone-win-x64
+Portable standalone executables for Windows, MacOS and Linux.
+> [!NOTE]
+> This still requires Powershell v7.5 to be installed on system.
 
 ### Docker
 Build docker image with predefined defaults.

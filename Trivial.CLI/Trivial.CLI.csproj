@@ -41,7 +41,7 @@
     <SelfContained>true</SelfContained> -->
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(BuildType)' == 'standalone-win-x64'">
+  <PropertyGroup Condition="$(BuildType.StartsWith('standalone-'))">
     <InvariantGlobalization>true</InvariantGlobalization>
 
     <PublishSingleFile>true</PublishSingleFile>
@@ -50,9 +50,11 @@
     <DebugSymbols>false</DebugSymbols>
     
     <PublishTrimmed>true</PublishTrimmed>
+    <JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>
     <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
 
-    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <RuntimeIdentifier>$(BuildType.Replace('standalone-',''))</RuntimeIdentifier>
+
   </PropertyGroup>
 
 

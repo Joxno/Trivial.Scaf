@@ -59,13 +59,15 @@ public class ConsoleTable
 
     private string _GenerateContent()
     {
-        var t_ContentStr = "";
+        var t_ContentStr = new List<string>();
         m_Rows.ForEach(R => {
+            var t_Content = "";
             R.Content.ForEach((C, I) => {
-                t_ContentStr += C.Length < m_ColumnWidths[I] ? C + _CreatePadString(m_ColumnWidths[I] - C.Length) : C.Substring(0, m_ColumnWidths[I]);
+                t_Content += C.Length < m_ColumnWidths[I] ? C + _CreatePadString(m_ColumnWidths[I] - C.Length) : C.Substring(0, m_ColumnWidths[I]);
             });
+            t_ContentStr.Add(t_Content);
         });
-        return t_ContentStr;
+        return string.Join("\n", t_ContentStr);
     }
 
     private string _CreatePadString(int Count) => 

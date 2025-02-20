@@ -52,7 +52,7 @@ public class ConsoleTable
     {
         var t_HeaderStr = "";
         Headers.ForEach((S, I) => {
-            t_HeaderStr += S.Length < m_ColumnWidths[I] ? S.PadRight(m_ColumnWidths[I] - S.Length) : S.Substring(0, m_ColumnWidths[I]);
+            t_HeaderStr += S.Length < m_ColumnWidths[I] ? S.PadRight(m_ColumnWidths[I]) : S[..m_ColumnWidths[I]];
         });
         return t_HeaderStr;
     }
@@ -63,7 +63,7 @@ public class ConsoleTable
         m_Rows.ForEach(R => {
             var t_Content = "";
             R.Content.ForEach((C, I) => {
-                t_Content += C.Length < m_ColumnWidths[I] ? C.PadRight(m_ColumnWidths[I] - C.Length) : C.Substring(0, m_ColumnWidths[I]);
+                t_Content += C.Length < m_ColumnWidths[I] ? C.PadRight(m_ColumnWidths[I]) : C[..m_ColumnWidths[I]];
             });
             t_ContentStr.Add(t_Content);
         });

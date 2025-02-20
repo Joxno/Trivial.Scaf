@@ -9,4 +9,6 @@ public interface IRepoService
     Result<Unit> AddRemoteRepo(string Url, Maybe<string> Name);
     Result<Unit> RemoveRemoteRepo(string Name);
     List<IndexConfig> GetLocalIndexes();
+    Maybe<IndexConfig> GetIndexByName(string Name);
+    Maybe<IndexConfig> GetIndexById(string Id);
 }

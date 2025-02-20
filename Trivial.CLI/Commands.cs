@@ -16,5 +16,7 @@ public static class Commands
         Root.AddConfigCmd();
         Root.AddRepoCmd();
         Root.AddSearchCmd();
+        Root.AddUpdateCmd();
+        Root.AddWorkspaceCmd();
     }
 }

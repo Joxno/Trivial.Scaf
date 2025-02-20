@@ -19,6 +19,7 @@ public class RepoService(IRepoRepository Repo, ISettingsService Service) : IRepo
         var t_Repo = JsonSerializer.Deserialize<IndexConfig>(File.ReadAllText(t_RepoIndexPath));
         var t_IndexedTemplates = _IndexTemplates(t_ResolvedPath).ToList();
         t_Repo = t_Repo with { 
+            LastUpdated = DateTime.UtcNow,
             Templates = t_IndexedTemplates.Select(I => I with { Path = I.Path.Replace(t_ResolvedPath, "") }).ToList()
         };
 
@@ -67,7 +68,7 @@ public class RepoService(IRepoRepository Repo, ISettingsService Service) : IRepo
     {
         Name.Then(N => R = R with { Name = N });
         Repo.SaveRemoteIndex(R);
-        Service.SaveRemoteConfig(new(R.Url, R.Name));
+        Service.SaveRemoteConfig(new(R.Id, R.Url, R.Name));
     });
 
     public Result<Unit> RemoveRemoteRepo(string Name) => Try.Invoke(() =>
@@ -76,4 +77,10 @@ public class RepoService(IRepoRepository Repo, ISettingsService Service) : IRepo
         
 
     public List<IndexConfig> GetLocalIndexes() => Repo.GetLocalIndexes();
+
+    public Maybe<IndexConfig> GetIndexByName(string Name) =>
+        GetLocalIndexes().FirstOrNone(I => I.Name == Name);
+
+    public Maybe<IndexConfig> GetIndexById(string Id) =>
+        GetLocalIndexes().FirstOrNone(I => I.Id.ToString() == Id);
 }

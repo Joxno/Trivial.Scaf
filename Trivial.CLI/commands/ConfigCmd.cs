@@ -1,4 +1,5 @@
 using System.CommandLine;
+using Trivial.CLI.config;
 using Trivial.CLI.data;
 using Trivial.CLI.extensions;
 using Trivial.CLI.interfaces;
@@ -21,13 +22,26 @@ public static class ConfigCmd
     {
         Cmd.NewSub("templates-path", "Adds a templates path", Path => 
             Service.GetTemplatesConfig()
-                .Map(C => C with { InstalledTemplatesPaths = C.InstalledTemplatesPaths.Append(Path).ToList() })
+                .Map(C => C with { InstalledTemplatesPaths = C.InstalledTemplatesPaths.Append(ScafPaths.ResolvePath(Path)).ToList() })
                 .Bind(Service.SaveTemplatesConfig)
                 .Then(
                     _ => Console.WriteLine("Templates Path Added."),
                     E => Console.WriteLine(E.Message)
                 ), 
             new Argument<string>("path", "The path to the templates")
+        );
+
+        Cmd.NewSub("workspace", "Adds workspace config", (Id, Name, Path) => {
+                var t_WorkspaceConfig = new WorkspaceRef(Guid.Parse(Id), Name, ScafPaths.ResolvePath(Path));
+                Service.SaveWorkspacesConfig(t_WorkspaceConfig)
+                    .Then(
+                        _ => Console.WriteLine("Workspace Added."),
+                        E => Console.WriteLine(E.Message)
+                    );
+            },
+            new Argument<string>("id", "The id of the workspace"),
+            new Argument<string>("name", "The name of the workspace"),
+            new Argument<string>("path", "The path to the workspace")
         );
     }
 

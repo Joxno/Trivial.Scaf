@@ -15,22 +15,23 @@ Prerequisites:
 
 # Installation
 ### Dotnet
-Easily install the tool via dotnet.
+Install the tool via dotnet.
 ```pwsh
 dotnet install tool Trivial.Scaf --global --prerelease
 ```
 
 ### Standalone
-Portable standalone executables
+Portable standalone executables:
+* standalone-win-x64
 
 ### Docker
 Build docker image with predefined defaults.
 ```pwsh
-.\Build-Docker.ps1
+./Build-Docker.ps1
 ```
 Run the built docker image interactively in a temporary container.
 ```pwsh
-.\Run-Docker.ps1
+./Run-Docker.ps1
 ```
 
 # Commands
@@ -43,8 +44,14 @@ Run the built docker image interactively in a temporary container.
 #### scaf remove \<key>
 #### scaf repo <add | remove>
 #### scaf search \<query>
-#### scaf workspace
+#### scaf workspace <add | remove>
+#### scaf update <all | repos | templates>
 #### scaf \<key>
+
+# Concepts
+### Repo
+### Template
+### Workspace
 
 ## License
 [MIT](LICENSE)

@@ -14,6 +14,7 @@ public class RepoRepository : IRepoRepository
 
         var t_Repo = new IndexConfig(
             Guid.NewGuid(),
+            DateTime.UtcNow,
             "new-repo",
             t_ResolvedPath,
             []

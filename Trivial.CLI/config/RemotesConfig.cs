@@ -5,6 +5,7 @@ public record struct RemotesConfig(
 );
 
 public record struct RemoteConfig(
+    Guid Id,
     string Url,
     string Name
 );

@@ -83,7 +83,7 @@ public static class TemplateCommands
                 "}"
             ]);
             //Console.WriteLine(t_ExecutionStr);
-            t_ExecutionStr.RunAsTerminalCmd();
+            t_ExecutionStr.RunAsTerminalCmdWithPwd(Maybe.None);
 
         });
     });

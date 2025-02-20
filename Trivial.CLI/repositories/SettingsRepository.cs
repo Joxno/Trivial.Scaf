@@ -14,7 +14,8 @@ public class SettingsRepository : ISettingsRepository
 
         var t_DefaultConfig = new ToolConfig(
             new TemplatesConfig([ScafPaths.GetTemplatesPath()]),
-            new RemotesConfig([])
+            new RemotesConfig([]),
+            []
         );
 
         return SaveToolConfig(t_DefaultConfig);

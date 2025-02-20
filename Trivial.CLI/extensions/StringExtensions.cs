@@ -5,7 +5,9 @@ namespace Trivial.CLI.extensions;
 
 public static class StringExtensions
 {
-    public static void RunAsTerminalCmd(this string Cmd)
+    public static void RunAsTerminalCmd(this string Cmd) => 
+        Cmd.RunAsTerminalCmdWithPwd(Maybe.None);
+    public static void RunAsTerminalCmdWithPwd(this string Cmd, Maybe<string> WorkingDir)
     {
         var t_CmdArg = $"-Command \"& {Cmd.EscapeQuotes()}\"";
         //Console.WriteLine(t_CmdArg);
@@ -17,7 +19,8 @@ public static class StringExtensions
                 Arguments = t_CmdArg,
                 RedirectStandardOutput = true,
                 UseShellExecute = false,
-                CreateNoWindow = true
+                CreateNoWindow = true,
+                WorkingDirectory = WorkingDir.HasValue ? WorkingDir.Value : Environment.CurrentDirectory
             }
         };
 
@@ -31,4 +34,7 @@ public static class StringExtensions
 
     public static string ToJson<T>(this T Obj) => 
         JsonSerializer.Serialize(Obj, new JsonSerializerOptions { WriteIndented = true });
+
+    public static Result<T> FromJson<T>(this string Json) => Try.Invoke(() => 
+        JsonSerializer.Deserialize<T>(Json, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true })!);
 }

@@ -1,17 +1,17 @@
 # Trivial.Scaf
 Automating code generation and scaffolding
 
-## WIP
-This tool is very early on in development, many design and implementation details are yet to be solidified.
-As such any interfaces, models and/or workflows are highly unstable and bound to change.
+> [!WARNING]
+> This tool is very early on in development, many design and implementation details are yet to be solidified.
+> As such any interfaces, models and/or workflows are highly unstable and bound to change.
 
-## Disclaimer
-This is an internal tool used at Trivial Software to handle scaffolding in a uniform way to allow for easier automation of scaffolding/code generation projects.
+> [!NOTE]
+> This is an internal tool used at [Trivial Software](https://trivialsoftware.co.uk/) to handle scaffolding in a uniform way to allow for easier automation of scaffolding/code generation projects.
 
 # Dependencies
 Prerequisites:
-* .NET 9.0
-* Powershell v7.5
+* [.NET 9.0](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)
+* [Powershell v7.5](https://github.com/PowerShell/PowerShell/releases/tag/v7.5.0)
 
 # Installation
 ### Dotnet
@@ -54,4 +54,4 @@ Run the built docker image interactively in a temporary container.
 ### Workspace
 
 ## License
-[MIT](LICENSE)
+Trivial.Scaf is licensed under the [MIT license](LICENSE).

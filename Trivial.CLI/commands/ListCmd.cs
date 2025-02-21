@@ -85,7 +85,7 @@ public static class ListCmd
             t_Table.Print();
         });
 
-        var t_ListCfg = t_ListCmd.NewSub("cfg", "Lists config");
+        var t_ListCfg = t_ListCmd.NewSub("config", "Lists config");
         var t_ListAllCfg = t_ListCfg.NewSub("all", "Lists full config file", () => {
             var t_Config = t_Service.GetToolConfig();
             t_Config.Then(

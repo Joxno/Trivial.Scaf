@@ -14,4 +14,5 @@ public interface ISettingsService
     Result<Unit> SaveReposConfig(RemotesConfig Config);
     Result<Unit> SaveRemoteConfig(RemoteConfig Config);
     Result<Unit> SaveWorkspacesConfig(WorkspaceRef Config);
+    Result<Unit> RemoveWorkspaceConfig(WorkspaceRef Config);
 }

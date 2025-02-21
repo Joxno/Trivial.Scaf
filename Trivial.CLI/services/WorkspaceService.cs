@@ -7,12 +7,15 @@ namespace Trivial.CLI.services;
 
 public class WorkspaceService(ISettingsService Service) : IWorkspaceService
 {
-    public Maybe<WorkspaceConfig> FindWorkspace() =>
-        _SearchForWorkspace(Environment.CurrentDirectory)
+    public Maybe<FoundWorkspace> FindWorkspace() => FindWorkspaceFromPath(Environment.CurrentDirectory);
+    public Maybe<FoundWorkspace> FindWorkspaceFromPath(string Path) =>
+        _SearchForWorkspace(ScafPaths.ResolvePath(Path))
             .Bind(P => {
-                var t_WorkspacePath = System.IO.Path.Combine(P, ".scaf", "workspace.scaf.json");
+                var t_WorkspacePath = System.IO.Path.Combine(P, "workspace.scaf.json");
                 return File.Exists(t_WorkspacePath) ?
-                    File.ReadAllText(t_WorkspacePath).FromJson<WorkspaceConfig>().ToMaybe() :
+                    File.ReadAllText(t_WorkspacePath).FromJson<WorkspaceConfig>()
+                        .Map(C => new FoundWorkspace(C, P))
+                        .ToMaybe() :
                     null!;
             });
 
@@ -73,4 +76,11 @@ public class WorkspaceService(ISettingsService Service) : IWorkspaceService
         Service.GetWorkspacesConfig()
             .Bind(Cfg => Cfg.FirstOrNone(W => W.Id == Id).ToResult())
             .Map(W => W.Path).ToMaybe();
+
+    public Result<Unit> SaveWorkspace(WorkspaceConfig Workspace) =>
+        FindWorkspace()
+            .Bind(WS => WS.Workspace.Id == Workspace.Id ? WS.ToMaybe() : null!).ToResult()
+            .Bind(WS => Try.Invoke(() => {
+                File.WriteAllText(System.IO.Path.Combine(WS.Path, "workspace.scaf.json"), Workspace.ToJson());
+            }));
 }

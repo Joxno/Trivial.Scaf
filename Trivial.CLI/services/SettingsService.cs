@@ -39,4 +39,13 @@ public class SettingsService(ISettingsRepository Repo) : ISettingsService
             return SaveToolConfig(t_Settings);
         });
 
+    public Result<Unit> RemoveWorkspaceConfig(WorkspaceRef Config) =>
+        GetToolConfig().Bind(Cfg => {
+            var t_Settings = Cfg with {
+                Workspaces = Cfg.Workspaces
+                    .Where(W => W.Id != Config.Id).ToList()
+            };
+
+            return SaveToolConfig(t_Settings);
+        });
 }

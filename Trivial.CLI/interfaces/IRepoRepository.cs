@@ -10,4 +10,6 @@ public interface IRepoRepository
     Result<Unit> SaveRemoteIndex(IndexConfig Index);
     Result<Unit> RemoveRemoteIndex(IndexConfig Index);
     List<IndexConfig> GetLocalIndexes();
+    Maybe<string> GetLocalRemotePathById(Guid Id);
+    Maybe<IndexConfig> GetLocalIndexById(Guid Id);
 }

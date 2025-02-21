@@ -13,6 +13,7 @@ public static class ListCmd
     {
         var t_Service = Locator.GetSettingsService();
         var t_RepoService = Locator.GetRepoService();
+        var t_IndexService = Locator.GetIndexService();
         var t_WorkspaceService = Locator.GetWorkspaceService();
         var t_ListCmd = Cmd.NewSub("list", "Lists objects");
 
@@ -32,7 +33,7 @@ public static class ListCmd
             }
             else
             {
-                t_RepoService.GetLocalIndexByName(t_Name.Value!).Map(I => I.Templates)
+                t_IndexService.GetLocalIndexByName(t_Name.Value!).Map(I => I.Templates)
                     .Then(Templates => {
                         foreach(var t_Template in Templates)
                         {
@@ -63,7 +64,7 @@ public static class ListCmd
         });
 
         var t_ListRepos = t_ListCmd.NewSub("repos", "Lists template repositories", () => {
-            var t_Repos = t_RepoService.GetLocalIndexes();
+            var t_Repos = t_IndexService.GetLocalIndexes();
             var t_Table = new ConsoleTable("Name", "Url", "Count", "Id");
             foreach(var t_Repo in t_Repos)
             {

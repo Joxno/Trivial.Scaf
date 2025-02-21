@@ -16,7 +16,9 @@ public static class Locator
     private static ISearchService m_RepoSearchService = new SearchService(m_RepoService);
     private static IWorkspaceService m_WorkspaceService = new WorkspaceService(m_SettingsService);
     private static IContextService m_ContextService = new ContextService();
-    private static ITemplateService m_TemplateService = new TemplateService(m_TemplateRepository, m_RepoSearchService, m_RepoService);
+    private static ICacheService m_CacheService = new CacheService(m_RepoRepository);
+    private static IIndexService m_IndexService = new IndexService(m_RepoRepository);
+    private static ITemplateService m_TemplateService = new TemplateService(m_TemplateRepository, m_RepoSearchService, m_CacheService, m_IndexService);
 
     public static ITemplateService GetTemplateService() => m_TemplateService;
     public static ISettingsService GetSettingsService() => m_SettingsService;
@@ -24,4 +26,6 @@ public static class Locator
     public static ISearchService GetSearchService() => m_RepoSearchService;
     public static IWorkspaceService GetWorkspaceService() => m_WorkspaceService;
     public static IContextService GetContextService() => m_ContextService;
+    public static ICacheService GetCacheService() => m_CacheService;
+    public static IIndexService GetIndexService() => m_IndexService;
 }

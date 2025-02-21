@@ -9,7 +9,7 @@ public static class IndexCmd
 {
     public static void AddIndexCmd(this RootCommand RootCmd)
     {
-        var t_Service = Locator.GetRepoService();
+        var t_Service = Locator.GetIndexService();
 
         var t_IndexCmd = RootCmd.NewSub("index", "Indexing commands");
         var t_IndexRepoCmd = t_IndexCmd.NewSub("repo", "Indexes a repo", Path => {

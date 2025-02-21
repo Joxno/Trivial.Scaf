@@ -28,6 +28,8 @@ public class RepoRepository : IRepoRepository
         return t_Repo;
     });
 
+    public Maybe<IndexConfig> GetLocalIndexById(Guid Id) => GetLocalIndexes().FirstOrNone(I => I.Id == Id);
+
     public List<IndexConfig> GetLocalIndexes() => Try.Invoke(() => {
         var t_RemotesPath = ScafPaths.GetRemotesPath();
         var t_Remotes = Directory.GetDirectories(t_RemotesPath);
@@ -39,6 +41,8 @@ public class RepoRepository : IRepoRepository
             return JsonSerializer.Deserialize<IndexConfig>(File.ReadAllText(t_RepoIndexPath));
         }).ToList();
     }).ValueOr([]);
+
+    public Maybe<string> GetLocalRemotePathById(Guid Id) => GetLocalRepos().FirstOrNone(R => R.Item1.Id == Id).Map(R => R.Item2);
 
     public List<(IndexConfig, string)> GetLocalRepos() => Try.Invoke(() => {
         var t_RemotesPath = ScafPaths.GetRemotesPath();

@@ -10,7 +10,7 @@ public static class UpdateCmd
 {
     public static void AddUpdateCmd(this RootCommand Cmd)
     {
-        var t_RepoService = Locator.GetRepoService();
+        var t_RepoService = Locator.GetIndexService();
 
         var t_UpdateCmd = Cmd.NewSub("update", "Runs update commands");
         var t_UpdateAllCmd = t_UpdateCmd.NewSub("all", "Updates repos & templates.", () => {

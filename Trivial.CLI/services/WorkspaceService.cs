@@ -38,8 +38,13 @@ public class WorkspaceService(ISettingsService Service) : IWorkspaceService
             new()
         );
 
-        File.WriteAllText(System.IO.Path.Combine(t_ScafDirPath, "workspace.scaf.json"), t_Workspace.ToJson());
+        new string[] {
+            "templates",
+            "remotes"
+        }.ForEach(D => Directory.CreateDirectory(System.IO.Path.Combine(t_ScafDirPath, D)));
 
+        File.WriteAllText(System.IO.Path.Combine(t_ScafDirPath, "workspace.scaf.json"), t_Workspace.ToJson());
+        
         return t_Workspace;
     });
 

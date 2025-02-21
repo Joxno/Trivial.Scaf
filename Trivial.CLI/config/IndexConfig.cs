@@ -9,6 +9,7 @@ public record struct IndexConfig(
 );
 
 public record struct TemplateIndex(
+    Guid RepoId,
     string Id,
     string Name,
     string Key,

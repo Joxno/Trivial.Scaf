@@ -32,7 +32,7 @@ public static class ListCmd
             }
             else
             {
-                t_RepoService.GetIndexByName(t_Name.Value!).Map(I => I.Templates)
+                t_RepoService.GetLocalIndexByName(t_Name.Value!).Map(I => I.Templates)
                     .Then(Templates => {
                         foreach(var t_Template in Templates)
                         {

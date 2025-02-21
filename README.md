@@ -54,5 +54,43 @@ Run the built docker image interactively in a temporary container.
 ### Template
 ### Workspace
 
-## License
+# Quickstart
+Prerequisites: Installation
+
+## Initialise the tool
+```pwsh
+scaf init
+```
+## Add remote & install your first template
+```pwsh
+scaf add repo "https://github.com/Joxno/Trivial.Scaf.Templates"
+```
+
+```pwsh
+scaf search template "test"
+```
+
+```pwsh
+scaf install template "test"
+```
+
+## Create your first template
+```pwsh
+scaf init template "test" "test_key"
+```
+
+```pwsh
+scaf install template ./ --from-path
+```
+
+## Create your first repo
+```pwsh
+scaf init repo ./repo --add-remote
+```
+
+```pwsh
+scaf index repo
+```
+
+# License
 Trivial.Scaf is licensed under the [MIT license](LICENSE).

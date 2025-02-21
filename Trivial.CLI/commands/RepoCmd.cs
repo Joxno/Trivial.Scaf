@@ -19,7 +19,7 @@ public static class RepoCmd
                     E => Console.WriteLine(E.Message)
                 );
         }, 
-        new Argument<string>("url", "The url of the remote repo"),
+        new Argument<string>("url", () => "./", "The url of the remote repo"),
         new Option<string?>(["--name", "-n"], () => null, "The name of the remote repo")
         );
 

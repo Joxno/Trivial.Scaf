@@ -40,6 +40,18 @@ public class RepoRepository : IRepoRepository
         }).ToList();
     }).ValueOr([]);
 
+    public List<(IndexConfig, string)> GetLocalRepos() => Try.Invoke(() => {
+        var t_RemotesPath = ScafPaths.GetRemotesPath();
+        var t_Remotes = Directory.GetDirectories(t_RemotesPath);
+        if(t_Remotes is null || t_Remotes.Length == 0) return [];
+
+        return t_Remotes.Where(R => File.Exists(System.IO.Path.Combine(R, "repo.scaf.json"))).Select(R => {
+            var t_RepoIndexPath = System.IO.Path.Combine(R, "repo.scaf.json");
+
+            return (JsonSerializer.Deserialize<IndexConfig>(File.ReadAllText(t_RepoIndexPath)), R);
+        }).ToList();
+    }).ValueOr([]);
+
     public Result<IndexConfig> GetRepoAtPath(string Path) => Try.Invoke(() => {
         var t_ResolvedPath = ScafPaths.ResolvePath(Path);
         var t_IndexPath = System.IO.Path.Combine(t_ResolvedPath, "repo.scaf.json");

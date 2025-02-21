@@ -75,6 +75,27 @@ public class RepoService(IRepoRepository Repo, ISettingsService Service) : IRepo
         GetLocalIndexes().FirstOrNone(I => I.Name == Name).ToResult()
             .Bind(Repo.RemoveRemoteIndex)).ToUnit();
         
+    public Result<Unit> UpdateLocalIndexes() => Try.Invoke(() => {
+        var t_Repos = Repo.GetLocalIndexes();
+        foreach(var t_Repo in t_Repos)
+            UpdateLocalIndex(t_Repo);
+    });
+
+    public Result<Unit> UpdateLocalIndex(IndexConfig Index) => Try.Invoke(() => {
+        if(Index.Url.StartsWith("http", StringComparison.OrdinalIgnoreCase)) ;
+        else if(Index.Url.StartsWith("git", StringComparison.OrdinalIgnoreCase)) ;
+        else if(Index.Url.StartsWith("ftp", StringComparison.OrdinalIgnoreCase)) ;
+        else // File
+        {
+            _UpdateFileRepo(Index.Url, Index.Name);
+        }
+    });
+
+    private void _UpdateFileRepo(string Path, string Name) => Repo.GetRepoAtPath(Path).Then(R =>
+    {
+        R = R with { Name = Name };
+        Repo.SaveRemoteIndex(R);
+    });
 
     public List<IndexConfig> GetLocalIndexes() => Repo.GetLocalIndexes();
 

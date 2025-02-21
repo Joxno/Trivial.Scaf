@@ -13,11 +13,11 @@ public static class Locator
     );
     private static IRepoRepository m_RepoRepository = new RepoRepository();
     private static IRepoService m_RepoService = new RepoService(m_RepoRepository, m_SettingsService);
-    private static ISearchService m_RepoSearchService = new SearchService(m_RepoService);
+    private static IIndexService m_IndexService = new IndexService(m_RepoRepository);
+    private static ISearchService m_RepoSearchService = new SearchService(m_IndexService);
     private static IWorkspaceService m_WorkspaceService = new WorkspaceService(m_SettingsService);
     private static IContextService m_ContextService = new ContextService();
     private static ICacheService m_CacheService = new CacheService(m_RepoRepository);
-    private static IIndexService m_IndexService = new IndexService(m_RepoRepository);
     private static ITemplateService m_TemplateService = new TemplateService(m_TemplateRepository, m_RepoSearchService, m_CacheService, m_IndexService);
 
     public static ITemplateService GetTemplateService() => m_TemplateService;

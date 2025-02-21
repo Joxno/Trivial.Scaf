@@ -78,4 +78,14 @@ public class RepoRepository : IRepoRepository
 
         File.WriteAllText(t_LocalIndexPath, JsonSerializer.Serialize(Index, new JsonSerializerOptions { WriteIndented = true }));
     });
+
+    public Result<Unit> SaveRemoteIndex(IndexConfig Index, string Path) => Try.Invoke(() => {
+        var t_RepoPath = ScafPaths.ResolvePath(Path);
+        var t_RepoIndexPath = System.IO.Path.Combine(t_RepoPath, "repo.scaf.json");
+
+        if(!Directory.Exists(t_RepoPath))
+            Directory.CreateDirectory(t_RepoPath);
+
+        File.WriteAllText(t_RepoIndexPath, JsonSerializer.Serialize(Index, new JsonSerializerOptions { WriteIndented = true }));
+    });
 }

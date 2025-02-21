@@ -3,7 +3,7 @@ using Trivial.CLI.interfaces;
 
 namespace Trivial.CLI.services;
 
-public class SearchService(IRepoService Service) : ISearchService
+public class SearchService(IIndexService Service) : ISearchService
 {
     public List<TemplateIndex> SearchForTemplateById(Guid Id) => 
         Service.GetLocalIndexes().SelectMany(R => R.Templates).Where(T => T.Id == Id.ToString()).ToList();

@@ -18,7 +18,7 @@ public class ConsoleTable
         m_Rows.Add(Row);
 
     public void AddRow(params List<object> Content) =>
-        m_Rows.Add(new ConsoleRow(Content.Select(O => O.ToString()).ToList()));
+        m_Rows.Add(new ConsoleRow(Content.Select(O => O?.ToString() ?? "").ToList()));
 
     public void Print()
     {

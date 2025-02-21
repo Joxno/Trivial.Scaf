@@ -35,7 +35,7 @@ public class RepoService(IRepoRepository Repo, ISettingsService Service) : IRepo
     public Maybe<string> GetLocalRemotePathById(string Id) => Repo.GetLocalRemotePathById(Guid.Parse(Id));
 
     public Result<Unit> ConfigureRemoteRepo(string Path, IndexConfig Config) =>
-        Repo.GetRepoAtPath(Path).Bind(R => Repo.SaveRemoteIndex(Config with { LastUpdated = DateTime.UtcNow }));
+        Repo.GetRepoAtPath(Path).Bind(R => Repo.SaveRemoteIndex(Config with { LastUpdated = DateTime.UtcNow }, Path));
 
     public Result<IndexConfig> GetRepoAtPath(string Path) => Repo.GetRepoAtPath(Path);
 }

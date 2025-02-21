@@ -8,6 +8,7 @@ public interface IRepoRepository
     Result<IndexConfig> GetRepoAtPath(string Path);
     List<(IndexConfig, string)> GetLocalRepos();
     Result<Unit> SaveRemoteIndex(IndexConfig Index);
+    Result<Unit> SaveRemoteIndex(IndexConfig Index, string Path);
     Result<Unit> RemoveRemoteIndex(IndexConfig Index);
     List<IndexConfig> GetLocalIndexes();
     Maybe<string> GetLocalRemotePathById(Guid Id);

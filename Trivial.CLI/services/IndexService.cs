@@ -1,4 +1,5 @@
 using System.Text.Json;
+using LibGit2Sharp;
 using Trivial.CLI.config;
 using Trivial.CLI.data;
 using Trivial.CLI.interfaces;
@@ -59,8 +60,21 @@ public class IndexService(IRepoRepository Repo) : IIndexService
     });
 
     public Result<Unit> UpdateLocalIndex(IndexConfig Index) => Try.Invoke(() => {
-        if(Index.Url.StartsWith("http", StringComparison.OrdinalIgnoreCase)) ;
-        else if(Index.Url.StartsWith("git", StringComparison.OrdinalIgnoreCase)) ;
+        if(Index.Url.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+        {
+            if(Index.Url.EndsWith(".git", StringComparison.OrdinalIgnoreCase))
+            {
+                _UpdateGitRemoteRepo(Index);
+            }
+            else if(Index.Url.Contains("github.com", StringComparison.OrdinalIgnoreCase))
+            {
+                _UpdateGitRemoteRepo(Index);
+            }
+        }
+        else if(Index.Url.StartsWith("git", StringComparison.OrdinalIgnoreCase))
+        {
+            _UpdateGitRemoteRepo(Index);
+        }
         else if(Index.Url.StartsWith("ftp", StringComparison.OrdinalIgnoreCase)) ;
         else // File
         {
@@ -73,6 +87,22 @@ public class IndexService(IRepoRepository Repo) : IIndexService
         R = R with { Name = Name };
         Repo.SaveRemoteIndex(R);
     });
+
+    private void _UpdateGitRemoteRepo(IndexConfig Index)
+    {
+        var t_Path = Repo.GetLocalRemotePathById(Index.Id);
+        if(!t_Path.HasValue) throw new Exception("Repo not found.");
+
+        Repo.GetRepoAtPath(t_Path.Value).Then(R =>
+        {
+            using var t_Repo = new Repository(t_Path.Value);
+            t_Repo.Reset(ResetMode.Hard, t_Repo.Head.Tip);
+            var t_Options = new PullOptions { FetchOptions = new FetchOptions() };
+            var t_Signature = new Signature(new Identity("scaf", "scaf"), DateTimeOffset.Now);
+            LibGit2Sharp.Commands.Pull(t_Repo, t_Signature, t_Options);
+        },
+        E => throw E);
+    }
 
     public List<IndexConfig> GetLocalIndexes() => Repo.GetLocalIndexes();
 

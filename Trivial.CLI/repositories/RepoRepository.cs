@@ -65,8 +65,11 @@ public class RepoRepository : IRepoRepository
     }).Flatten();
 
     public Result<Unit> RemoveRemoteIndex(IndexConfig Index) => Try.Invoke(() => {
-        var t_Path = System.IO.Path.Combine(ScafPaths.GetRemotesPath(), Index.Id.ToString());
-        Directory.Delete(t_Path, true);
+        var t_Path = GetLocalRemotePathById(Index.Id);
+        if(t_Path.HasValue)
+            Directory.Delete(t_Path.Value, true);
+        else
+            throw new Exception("Repo not found.");
     });
 
     public Result<Unit> SaveRemoteIndex(IndexConfig Index) => Try.Invoke(() => {

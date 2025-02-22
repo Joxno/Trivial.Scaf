@@ -13,6 +13,7 @@ public interface ISettingsService
     Result<Unit> SaveTemplatesConfig(TemplatesConfig Config);
     Result<Unit> SaveReposConfig(RemotesConfig Config);
     Result<Unit> SaveRemoteConfig(RemoteConfig Config);
+    Result<Unit> RemoveRemoteConfig(RemoteConfig Config);
     Result<Unit> SaveWorkspacesConfig(WorkspaceRef Config);
     Result<Unit> RemoveWorkspaceConfig(WorkspaceRef Config);
 }

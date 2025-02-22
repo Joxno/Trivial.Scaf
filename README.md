@@ -63,7 +63,7 @@ scaf init
 ```
 ## Add remote & install your first template
 ```pwsh
-scaf add repo "https://github.com/Joxno/Trivial.Scaf.Templates"
+scaf repo add "https://github.com/Joxno/Trivial.Scaf.Templates"
 ```
 
 ```pwsh
@@ -74,6 +74,20 @@ scaf search template "test"
 scaf install template "test"
 ```
 
+```pwsh
+scaf test
+```
+
+```pwsh
+> Hello, World! from test template.
+```
+
+## Create your first repo
+```pwsh
+scaf init repo ./repo
+```
+> Adding **--add-remote** to the command will automatically add the newly initialised repo as a file repo to your scaf tool config.
+
 ## Create your first template
 ```pwsh
 scaf init template "test" "test_key"
@@ -83,13 +97,28 @@ scaf init template "test" "test_key"
 scaf install template ./ --from-path
 ```
 
-## Create your first repo
+## Index your repo
 ```pwsh
-scaf init repo ./repo --add-remote
+scaf index repo
+```
+
+## Create your first workspace & add it to your config
+```pwsh
+scaf init workspace
 ```
 
 ```pwsh
-scaf index repo
+scaf workspace add
+```
+
+## Add custom data to your workspace
+```pwsh
+scaf workspace configure data add "test_key" '{ "Test": "Testing" }'
+```
+
+## Remove data from your workspace
+```pwsh
+scaf workspace configure data remove "test_key"
 ```
 
 # License

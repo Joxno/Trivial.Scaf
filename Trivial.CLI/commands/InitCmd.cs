@@ -54,7 +54,7 @@ public static class InitCmd
                 new Option<bool>(["--only-config"], () => false, "Only creates the template config file")
             );
 
-            var t_InitRepoCmd = t_InitCmd.NewSub("repo", "Initialises a new remote repo", (Path, AddRemote, Name) => {
+            var t_InitRepoCmd = t_InitCmd.NewSub("repo", "Initialises a new remote repo", (Path, AddRemote, Name, AddGit) => {
                 var t_ResolvedPath = ScafPaths.ResolvePath(Path);
                 var t_Result = t_RepoService.InitRepo(t_ResolvedPath, Name!);
                 t_Result.Then(
@@ -67,8 +67,9 @@ public static class InitCmd
                 );
             }, 
             new Argument<string>("path", () => "./", "The path to the repo. Creates the path if it doesn't already exist."),
-            new Option<bool>(["--add-remote"], "Adds the initialised repo to scaf settings for remote repos."),
-            new Option<string?>(["--name", "-n"], () => null, "The name of the repo")
+            new Option<bool>(["--add-remote"], () => false, "Adds the initialised repo to scaf settings for remote repos."),
+            new Option<string?>(["--name", "-n"], () => null, "The name of the repo"),
+            new Option<bool>(["--init-git"], () => false, "Initialises a git repo in the path.")
         );
 
         var t_InitWorkspace = t_InitCmd.NewSub("workspace", "Initialises a workspace", (Path, Name) => {

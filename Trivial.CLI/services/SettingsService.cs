@@ -48,4 +48,16 @@ public class SettingsService(ISettingsRepository Repo) : ISettingsService
 
             return SaveToolConfig(t_Settings);
         });
+
+    public Result<Unit> RemoveRemoteConfig(RemoteConfig Config) =>
+        GetToolConfig().Bind(Cfg => {
+            var t_Settings = Cfg with {
+                Repos = Cfg.Repos with {
+                    Repos = Cfg.Repos.Repos
+                        .Where(R => R.Id != Config.Id).ToList()
+                }
+            };
+
+            return SaveToolConfig(t_Settings);
+        });
 }

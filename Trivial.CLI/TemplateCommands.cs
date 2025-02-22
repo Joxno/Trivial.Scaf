@@ -14,6 +14,7 @@ public static class TemplateCommands
     public static void AddTemplateCommands(this RootCommand Root) => Try.Invoke(() =>
     {
         var t_Service = Locator.GetTemplateService();
+        var t_ContextService = Locator.GetContextService();
         var t_Templates = t_Service.GetTemplates();
         foreach(var t_Template in t_Templates)
         {
@@ -21,28 +22,28 @@ public static class TemplateCommands
 
             foreach(var t_Trigger in t_Template.Triggers)
             {
-                _TryAddRun(t_Trigger, t_TemplateCmd, t_Template, t_Service);
+                _TryAddRun(t_Trigger, t_TemplateCmd, t_Template, t_Service, t_ContextService);
             }
 
             Root.Add(t_TemplateCmd);
         }
     });
 
-    private static void _TryAddRun(TemplateRun Trigger, Command TemplateCmd, Template Template, ITemplateService Service) => Try.Invoke(() => {
+    private static void _TryAddRun(TemplateRun Trigger, Command TemplateCmd, Template Template, ITemplateService Service, IContextService ContextService) => Try.Invoke(() => {
         if(string.IsNullOrWhiteSpace(Trigger.Keyword))
         {
-            _ConstructCmdProxy(Trigger, TemplateCmd, Template, Service);
+            _ConstructCmdProxy(Trigger, TemplateCmd, Template, Service, ContextService);
         }
         else
         {
             var t_RunCmd = new Command(Trigger.Keyword, Trigger.Description);
-            _ConstructCmdProxy(Trigger, t_RunCmd, Template, Service);
+            _ConstructCmdProxy(Trigger, t_RunCmd, Template, Service, ContextService);
 
             TemplateCmd.Add(t_RunCmd);
         }
     });
 
-    private static void _ConstructCmdProxy(TemplateRun Trigger, Command Cmd, Template Template, ITemplateService Service) => Try.Invoke(() => {
+    private static void _ConstructCmdProxy(TemplateRun Trigger, Command Cmd, Template Template, ITemplateService Service, IContextService ContextService) => Try.Invoke(() => {
         Trigger.Parameters.ForEach(P => {
             var t_Param = new Argument<string>(P.Name, P.Description);
             Cmd.Add(t_Param);
@@ -73,8 +74,10 @@ public static class TemplateCommands
             var t_Executable = System.IO.Path.Combine(t_TemplateDir, Trigger.Action.Executable);
             var t_ArgsStr = string.Join(" ", t_Args.Select(A => $"-{A.Item1} {A.Item2}"));
             var t_ParamStr = string.Join(" ", t_Params.Select(P => $"-{P.Item1} {P.Item2}"));
+            var t_ContextStr = ContextService.ConstructContextInjection().ValueOr("");
             var t_ExecutionStr = string.Join("", [
                 "{",
+                t_ContextStr + ";" +
                 t_GlobalCfgIncludes,
                 t_GlobalIncludes,
                 t_CfgIncludes,

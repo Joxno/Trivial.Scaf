@@ -1,3 +1,4 @@
+using Trivial.CLI.config;
 using Trivial.CLI.interfaces;
 using Trivial.CLI.models;
 
@@ -17,18 +18,22 @@ public class TemplateService(ITemplateRepository Repo, ISearchService SearchServ
         if(t_SearchResults.Count == 0) return new Exception($"No template found with the name {Name}");
         if(t_SearchResults.Count > 1) return new Exception($"Multiple templates found with the name {Name}");
 
-        var t_Template = t_SearchResults[0];
-        var t_Repo = IndexService.GetLocalIndexes().FirstOrNone(I => I.Templates.Any(T => T.Id == t_Template.Id));
-        if(!t_Repo.HasValue) return new Exception($"Repo not found for template {Name}");
+        return _InstallTemplate(t_SearchResults[0], Force);
+    }
 
-        if(!CacheService.IsTemplateInCacheById(t_Repo.Value.Id, Guid.Parse(t_Template.Id)))
+    private Result<Unit> _InstallTemplate(TemplateIndex Template, bool Force)
+    {
+        var t_Repo = IndexService.GetLocalIndexes().FirstOrNone(I => I.Templates.Any(T => T.Id == Template.Id));
+        if(!t_Repo.HasValue) return new Exception($"Repo not found for template {Template.Name}");
+
+        if(!CacheService.IsTemplateInCacheById(t_Repo.Value.Id, Guid.Parse(Template.Id)))
         {
-            var t_Result = CacheService.CacheTemplateFromRemote(Guid.Parse(t_Template.Id), t_Repo.Value.Id);
+            var t_Result = CacheService.CacheTemplateFromRemote(Guid.Parse(Template.Id), t_Repo.Value.Id);
             if(t_Result.HasError) return t_Result;
         }
 
-        var t_Path = CacheService.GetCachedTemplatePath(t_Repo.Value.Id, Guid.Parse(t_Template.Id));
-        if(!t_Path.HasValue) return new Exception($"Template not found in cache for {Name}");
+        var t_Path = CacheService.GetCachedTemplatePath(t_Repo.Value.Id, Guid.Parse(Template.Id));
+        if(!t_Path.HasValue) return new Exception($"Template not found in cache for {Template.Name}");
 
         return Repo.InstallTemplate(t_Path.Value, Force).ToUnit();
     }

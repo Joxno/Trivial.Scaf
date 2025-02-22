@@ -38,8 +38,6 @@
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>scaf</ToolCommandName>
 
-    <!-- <PublishSingleFile>true</PublishSingleFile>
-    <SelfContained>true</SelfContained> -->
   </PropertyGroup>
 
   <PropertyGroup Condition="$(BuildType.StartsWith('standalone-'))">
